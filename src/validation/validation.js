@@ -42,4 +42,4 @@ const validPassword = function (value) {
 };
 
 
-module.exports={validTitle,validName,validMobile,validemail,validPassword,validISBN}
+module.exports={validTitle,validName,validMobile,validemail,validPassword,validISBN,isValidStreet,isValidPincode}
