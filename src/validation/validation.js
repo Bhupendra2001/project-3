@@ -15,7 +15,11 @@ const isValidStreet = function (body) {
     return passRegex.test(Pincode);
   };
 
-  
+  const validISBN = function (isbn) {
+    const isbnRegex =/^97(8|9))?\d{9}(\d|X)$/
+    return isbnRegex.test(isbn)
+
+  }
 
 const validName = function (value) {
     let name = /^[a-zA-Z ]{3,}$/;
@@ -38,4 +42,4 @@ const validPassword = function (value) {
 };
 
 
-module.exports={validTitle,validName,validMobile,validemail,validPassword}
+module.exports={validTitle,validName,validMobile,validemail,validPassword,validISBN}

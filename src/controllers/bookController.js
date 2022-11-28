@@ -20,9 +20,14 @@ exports.createBook = async (req, res) => {
 
 
         if (validName(title)) return res.status(400).send({ status: false, msg: "invalid title" })
+
         if (validName(excerpt)) return res.status(400).send({ status: false, msg: "invalid excerpt" })
+
         if (validName(category)) return res.status(400).send({ status: false, msg: "invalid category" })
+        
+
         if (isvalidObjectid(userId)) return res.status(400).send({ status: false, msg: "invalid userId" })
+        if(validISBN(ISBN)){return res .status(400).send({status :false , msg:" please provide a valid ISBN"})}
 
         const userID = await userModels.findOne({ userId })
         if (!userID) return res.status(404).send({ status: false, msg: "user is not present in data" })
@@ -35,7 +40,7 @@ exports.createBook = async (req, res) => {
 
 
         const savaData = await bookModels.create(data);
-        return res.status(201).send({ status: true, msg: "successfully created ", data: savaData })
+        return res.status(201).send({ status: true, msg: "successfully created ", savaData })
     } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
     }
