@@ -184,7 +184,7 @@ return res.status(400).send({status:false,msg:err.message})
     }catch(error){
        return res
        .status(500)
-       .send({status: false, message: error.message, message: err.message })
+       .send({status: false, message: error.message})
     }
 }
 
