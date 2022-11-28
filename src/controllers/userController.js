@@ -9,7 +9,9 @@ const {
     validName,
     validMobile,
     validemail,
-    validPassword,isValidStreet,isValidPincode}=require("../validation/validation")
+    validPassword,
+    isValidStreet,
+    isValidPincode}=require("../validation/validation")
 
 
 exports.registerUser=async (req,res)=>{
@@ -77,7 +79,12 @@ if (!validTitle(title)) {
         .status(400)
         .send({ status: false, message: "Enter a valid email" });
     }
- 
+
+    if (!validemail(email)) {
+        return res
+          .status(400)
+          .send({ status: false, message: "Enter a valid email" });
+      }
       if (!validPassword(password)) {
         return res
           .status(400)
