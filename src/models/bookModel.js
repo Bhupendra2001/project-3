@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 const ObjectId = mongoose.Schema.Types.ObjectId
 
-const book = new mongoose.Schema({
+const books = new mongoose.Schema({
 
     title: {
         type: String,
@@ -27,7 +27,7 @@ const book = new mongoose.Schema({
         require: true
     },
     subcategory: {
-        street: String,
+        type :[String],
         require: true
     },
     reviews: {
@@ -49,7 +49,7 @@ const book = new mongoose.Schema({
     }
 }, { timestamps: true })
 
-module.exports = mongoose.model("book", book)
+module.exports = mongoose.model("book", books)
 
  
 
