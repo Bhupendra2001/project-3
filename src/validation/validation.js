@@ -4,6 +4,19 @@
     if (title.test(value)) return true ;
 };
 
+const isValidStreet = function (body) {
+    const nameRegex = /^[a-zA-Z0-9_ ]*$/;
+    return nameRegex.test(body);
+  };
+
+
+  const isValidPincode = function (Pincode) {
+    const passRegex = /^[1-9][0-9]{5}$/;
+    return passRegex.test(Pincode);
+  };
+
+  
+
 const validName = function (value) {
     let name = /^[a-zA-Z ]{3,}$/;
     if (name.test(value)) return true;
