@@ -9,14 +9,15 @@ const {
     validName,
     validMobile,
     validemail,
-    validPassword}=require("../validation/validation")
+    validPassword,isValidStreet,isValidPincode}=require("../validation/validation")
 
 
 exports.registerUser=async (req,res)=>{
 try{
 const data = req.body
 const {title,name,phone,email,password,address}=data
-const {street,city,pincode}=address
+
+if(address) {var {street,city,pincode}=address}
 
 //validation
 if(!title){
@@ -52,9 +53,6 @@ if (address) {
 
 
 
-
-
-
  const duplicateMobile= await userModel.findOne({phone})
 if(duplicateMobile) return res
 .status(400)
@@ -77,21 +75,14 @@ if (!validTitle(title)) {
     if (!validemail(email)) {
       return res
         .status(400)
-        .send({ status: false, message: "Enter a valid name" });
+        .send({ status: false, message: "Enter a valid email" });
     }
-
-    if (!validemail(email)) {
-        return res
-          .status(400)
-          .send({ status: false, message: "Enter a valid name" });
-      }
+ 
       if (!validPassword(password)) {
         return res
           .status(400)
-          .send({ status: false, message: "Enter a valid name" });
+          .send({ status: false, message: "Enter a valid password" });
       }
-
-
 
     if (!validMobile(phone)) {
       return res
@@ -99,27 +90,31 @@ if (!validTitle(title)) {
         .send({ status: false, message: "Enter a valid phone number" });
     }
 
+if(address){
 
-if (address) {
+ if(street){
     if (!isValidStreet(street)) {
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid street" });
-    }
+    }}
+
+if(city){
 
     if (!validName(city)) {
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid city" });
-    }
+    }}
+if(pincode){
 
     if (!isValidPincode(pincode)) {
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid pincode" });
     }
+}
   }
-
 
 
 const salt=await bcrypt.genSalt(saltRounts)
@@ -153,26 +148,25 @@ return res.status(400).send({status:false,msg:err.message})
         .status(400)
         .send({ status: false, msg: "Password is required" })
       //==============================================checking the email id or password is exist or not ===========================//     
-      let getUser = await authorModel
+      let getUser = await userModel
       .findOne({ email: email })
       .select({ password: 1 })
 
       //================================================User not found==============================================================//    
-      if (Object.keys(getUser).length == 0) return res.status(404).send({ status: false, msg: "User not found" })
+      if (!getUser) return res.status(404).send({ status: false, msg: "User not found" })
 
       //========================================password matching by bcrypt.compare method password comeparing ==================================//      
-      const matchPassword = await bcrypt.compare(password, getUser.password)
+      const matchPassword = bcrypt.compare(password, getUser.password)
 
       if (!matchPassword) return res
       .status(401)
       .send({ status: false, msg: "Password is incorrect" })
 
-    
-            
-  let token=jwt.sign({userId: data._id.toString()},"sweta") 
+                
+  let token=jwt.sign({userId: getUser._id},"shivam",{expiresIn:"1m"}) 
         let finalData = {
             token: token,
-            userId: data._id.toString(),
+            userId:token.userId,
             exp: new Date().getTime()+600,
         }
        return res
@@ -183,7 +177,7 @@ return res.status(400).send({status:false,msg:err.message})
     }catch(error){
        return res
        .status(500)
-       .send({status: false, message: error.message, message: " server error"  })
+       .send({status: false, message: error.message, message: err.message })
     }
 }
 

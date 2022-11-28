@@ -32,7 +32,7 @@ const validMobile = function (value) {
 };
 
 const validemail = function (value) {
-    let email = /^[a-z0-9_]{3,}@gmail.com$/;
+    let email = /^[a-z]{1}[a-z0-9._]{1,100}[@]{1}[a-z]{2,15}[.]{1}[a-z]{2,10}$/;
     if (email.test(value)) return true;
 };
 
@@ -42,4 +42,4 @@ const validPassword = function (value) {
 };
 
 
-module.exports={validTitle,validName,validMobile,validemail,validPassword,validISBN}
+module.exports={validTitle,validName,validMobile,validemail,validPassword,validISBN,isValidStreet,isValidPincode}
