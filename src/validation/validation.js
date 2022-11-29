@@ -5,8 +5,6 @@ const validDate = function (value) {
   if(date.test(value)) return true;
 }
 
-
-
   const validTitle = function(value) {
     let title = /^(Mr|Mrs|Miss)$/; 
     if (title.test(value)) return true ;
@@ -30,7 +28,7 @@ const isValidStreet = function (body) {
 }
 
 const validName = function (value) {
-    let name = /^[a-zA-Z ]{3,}$/;
+    let name = /^[a-zA-Z. ]{3,}$/;
     if (name.test(value)) return true;
 };
 

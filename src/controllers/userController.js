@@ -175,8 +175,8 @@ return res.status(500).send({status:false,msg:err.message})
   let token=jwt.sign({userId: getUser._id},"group40",{expiresIn:"1m"})
         let finalData = {
             token: token,
-            userId:token.userId,
-            exp: new Date().getTime()+600,
+            userId:getUser._id,
+            exp: new Date().getTime()+600
         }
        return res
        .status(200)
