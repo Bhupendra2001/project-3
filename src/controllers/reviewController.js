@@ -68,7 +68,7 @@ let review=await reviewModel.findOne({_id:params2,isDeleted:false})
 if(!review){
     return res.status(400).send({status:false, msg:"Oooh... review is not present"})
 }
-if(review.bookId=!params1)return res.status(401).send({status:false,msg:"Oooh... bookId is not maching from blog"})
+if(review.bookId!=params1)return res.status(401).send({status:false,msg:"Oooh... bookId is not maching from blog"})
 
 let updateReview= await reviewModel.findOneAndUpdate({_id:review},{
 
