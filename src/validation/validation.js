@@ -1,3 +1,11 @@
+const mongoose=require("mongoose")
+
+const validDate = function (value) {
+  let date=/^\d{4}-\d{2}-\d{2}$/;
+  if(date.test(value)) return true;
+}
+
+
 
   const validTitle = function(value) {
     let title = /^(Mr|Mrs|Miss)$/; 
@@ -15,11 +23,11 @@ const isValidStreet = function (body) {
     return passRegex.test(Pincode);
   };
 
-  const validISBN = function (isbn) {
-    const isbnRegex =/^97(8|9))?\d{9}(\d|X)$/
-    return isbnRegex.test(isbn)
-
-  }
+   
+  const validISBN = function(value){
+    let ISBN = /^(?=(?:\D*\d){10}(?:(?:\D*\d){3})?$)[\d-]+$/
+    return ISBN.test(value)
+}
 
 const validName = function (value) {
     let name = /^[a-zA-Z ]{3,}$/;
@@ -41,5 +49,15 @@ const validPassword = function (value) {
     if (password.test(value)) return true;
 };
 
+const isvalidObjectid=function(value){
+return mongoose.Types.ObjectId(value)
 
-module.exports={validTitle,validName,validMobile,validemail,validPassword,validISBN,isValidStreet,isValidPincode}
+}
+
+const validRating=function (value) {
+  let Rating = /^[1-5 ]{1,1}$/;
+  if (Rating.test(value)) return true;
+};
+
+
+module.exports={validRating,validTitle,validDate,validName,validMobile,validemail,validPassword,validISBN,isValidStreet,isValidPincode,isvalidObjectid}

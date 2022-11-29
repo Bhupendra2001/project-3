@@ -104,7 +104,8 @@ if(address){
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid street" });
-    }}
+    }
+  }
 
 if(city){
 
@@ -112,7 +113,8 @@ if(city){
       return res
         .status(400)
         .send({ status: false, message: "Enter a valid city" });
-    }}
+    }
+  }
 if(pincode){
 
     if (!isValidPincode(pincode)) {
@@ -135,7 +137,7 @@ return res.status(201).send({status:true,msg:"userCreate successfully" ,dataStor
 
 }
 catch(err){
-return res.status(400).send({status:false,msg:err.message})
+return res.status(500).send({status:false,msg:err.message})
 }
 }
 
@@ -170,7 +172,7 @@ return res.status(400).send({status:false,msg:err.message})
       .send({ status: false, msg: "Password is incorrect" })
 
                 
-  let token=jwt.sign({userId: getUser._id},"shivam",{expiresIn:"1m"}) 
+  let token=jwt.sign({userId: getUser._id},"group40",{expiresIn:"1m"})
         let finalData = {
             token: token,
             userId:token.userId,
