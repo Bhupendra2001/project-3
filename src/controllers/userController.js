@@ -102,10 +102,9 @@ const loginUser = async function (req, res) {
       .send({ status: false, msg: "Password is incorrect" })
 
 
-    let token = jwt.sign({ userId: getUser._id }, "group40", { expiresIn: "1m" })
+    let token = jwt.sign({ userId: getUser._id }, "group40", { expiresIn: "60m" })
     let finalData = {
       token: token,
-      userId: getUser._id,
       exp: new Date().getTime() + 600
     }
     return res

@@ -58,7 +58,8 @@ const getbooks = async (req, res) => {
 
         query.isDeleted = false
 
-        const data = await bookModels.find(quer).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).sort({ title: 1 })
+        const data = await bookModels.find(query).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).sort({ title: 1 })
+        
         if (data.length == 0) return res.status(400).send({ status: false, msg: "data not found" })
 
 

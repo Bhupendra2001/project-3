@@ -3,10 +3,11 @@ const { isValidObjectId } = require('mongoose')
 const bookModel = require("../models/bookModel")
 
 const Authentication = async (req, res, next) => {
-
     try {
-        const hedear = req.headers["x-Api-key"]
-        if (!hedear) res.status(400).send({ status: false, msg: "Hedear is not present" })
+        const hedear = req.headers["x-api-key"]
+
+        if(!hedear) return res.status(400).send({ status: false, msg: "header is not present" })
+
         jwt.verify(hedear, "group40", function (err, token) {
          if (err) {
                return res.status(401).send({ status: false, msg: "token is invalid." })
@@ -34,7 +35,7 @@ const Authrization = async (req, res, next) => {
         let bookData = await bookModel.findOne({ _id: bookId, isDeleted: false })
         if (!bookData) return res.status(400).send({ status: false, msg: "book is not present" })
 
-        if (bookData.userId !== userId) { return res.status(403).send({ status: false, msg: "user is not Authrization" }) }
+        if (bookData.userId != userId) { return res.status(403).send({ status: false, msg: "user is not Authrization" }) }
 
         next()
 
