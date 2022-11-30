@@ -104,9 +104,8 @@ const loginUser = async function (req, res) {
 
     let token = jwt.sign({ userId: getUser._id }, "group40", { expiresIn: "60m" })
     let finalData = {
-      token: token,
-      exp: new Date().getTime() + 600
-    }
+      token: token
+           }
     return res
       .status(200)
       .send({ status: true, message: "token is successfully generated", finalData })
