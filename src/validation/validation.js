@@ -6,7 +6,6 @@ const validDate = function (value) {
 }
 
 
-
   const validTitle = function(value) {
     let title = /^(Mr|Mrs|Miss)$/; 
     if (title.test(value)) return true ;
