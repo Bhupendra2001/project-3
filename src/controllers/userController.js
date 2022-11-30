@@ -97,18 +97,11 @@ const loginUser = async function (req, res) {
     //========================================password matching by bcrypt.compare method password comeparing ==================================//      
     const matchPassword = bcrypt.compare(password, getUser.password)
 
-    if (!matchPassword) return res
-      .status(401)
-      .send({ status: false, msg: "Password is incorrect" })
-
+    if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" })
 
     let token = jwt.sign({ userId: getUser._id }, "group40", { expiresIn: "60m" })
-    let finalData = {
-      token: token
-           }
-    return res
-      .status(200)
-      .send({ status: true, message: "token is successfully generated", finalData })
+
+    return res.status(200).send({ status: true, message: "token is successfully generated",  token: token })
 
 
   } catch (error) {

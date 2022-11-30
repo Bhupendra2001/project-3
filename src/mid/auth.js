@@ -6,11 +6,11 @@ const Authentication = async (req, res, next) => {
     try {
         const hedear = req.headers["x-api-key"]
 
-        if(!hedear) return res.status(400).send({ status: false, msg: "Dost... header is not present" })
+        if (!hedear) return res.status(400).send({ status: false, msg: "Dost... header is not present" })
 
         jwt.verify(hedear, "group40", function (err, token) {
-         if (err) {
-               return res.status(401).send({ status: false, msg: "Dost... token is invalid." })
+            if (err) {
+                return res.status(401).send({ status: false, msg: "Dost... Token is invalid Or Token has been Expired" })
             }
             else {
                 req.userId = token.userId
@@ -39,10 +39,10 @@ const Authrization = async (req, res, next) => {
 
         next()
 
-       } catch (err) {
+    } catch (err) {
         return res.status(500).send({ status: false, msg: err.message })
-       }
+    }
 
 }
 
-module.exports = { Authentication ,Authrization}
+module.exports = { Authentication, Authrization }
