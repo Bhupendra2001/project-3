@@ -49,19 +49,24 @@ exports.createBook = async (req, res) => {
 
 exports.getbooks = async (req, res) => {
 
+    try{
     let query = req.query
 
     let w = Object.keys(query)
 
     if (!["userId", "category", "subcategory"].includes(...w)) return res.status(400).send({ msg: "query shoud be wrong" })
 
-    quer.isDeleted = false
+    query.isDeleted = false
 
     const data = await bookModels.find(quer).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).sort({ title: 1 })
     if (data.length == 0) return res.status(400).send({ status: false, msg: "data not found" })
 
 
     return res.status(200).send({ status: true, message: "Books list", data: data })
+    }
+    catch(err){
+        return res.status(500).send({msg:err.message})
+    }
 
 }
 
@@ -70,6 +75,7 @@ exports.getbooks = async (req, res) => {
 
 exports.getbook = async (req, res) => {
 
+try{
     const bookId = req.params.bookId
     if (!isvalidObjectid(bookId)) return res.status(400).send({ status: false, msg: "invalid bookId" })
 
@@ -97,7 +103,10 @@ exports.getbook = async (req, res) => {
 
 
     if (review.length > 0) return res.status(200).send({ msg: data2 })
-
+}
+catch(err){
+    return res.send(500).send({status:false,msg:err.message})
+}
 }
 
 exports.updateBooks = async function (req, res) {
@@ -117,7 +126,7 @@ exports.updateBooks = async function (req, res) {
             if (!validDate(data.releasedAt)) return res.status(400).send({ status: false, message: "Date should be in (YYYY-MM-DD) format", });
         }
 
-        let validBookId = await bookModels.findOne({ _id: bookId });
+        let validBookId = await bookModels.findOne({ _id: bookId});
 
         if (!validBookId || validBookId.isDeleted)
             return res.status(400).send({ status: false, msg: "book not found" });
