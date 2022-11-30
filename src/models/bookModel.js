@@ -27,16 +27,16 @@ const books = new mongoose.Schema({
         require: true
     },
     subcategory: {
-        type :[String],
+        type: [String],
         require: true
     },
     reviews: {
         type: Number,
-         default: 0 
-             },
+        default: 0
+    },
     deletedAt: {
         type: Date,
-        default:null
+        default: null
     },
     isDeleted: {
         type: Boolean,
@@ -44,13 +44,13 @@ const books = new mongoose.Schema({
     },
     releasedAt: {
         type: Date,
-        formate:"YYYY-MM-DD",
+        formate: "YYYY-MM-DD",
         require: true
     }
 }, { timestamps: true })
 
 module.exports = mongoose.model("book", books)
 
- 
+
 
 
