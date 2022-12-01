@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
     if (!email) return res.status(400).send({ status: false, msg: "email is required" })
     if (!password) return res.status(400).send({ status: false, msg: "password is required" })
     if (address){
-    if(typeof address !== "object") return res.status(400).send({ status: false, message: "address must be type object" });}
+    if(typeof address != "object") return res.status(400).send({ status: false, message: "address must be type object" });}
 
     const duplicateMobile = await userModel.findOne({ phone })
     if(duplicateMobile) return res.status(400).send({ status: false, msg: "phone number is already registred" })
@@ -31,9 +31,10 @@ const registerUser = async (req, res) => {
 
     //regex validation
     if (!validTitle(title))  return res.status(400).send({ status: false, message: "Enter a valid title" });
+    if (!validName(name))  return res.status(400).send({ status: false, message: "Enter a valid Name" });
+    if (!validMobile(phone)) return res.status(400).send({ status: false, message: "Enter a valid phone number" });
     if (!validemail(email))  return res.status(400).send({ status: false, message: "Enter a valid email" });
     if (!validPassword(password)) return res.status(400).send({ status: false, message: "Enter a valid password" });
-    if (!validMobile(phone)) return res.status(400).send({ status: false, message: "Enter a valid phone number" });
     
     if (address) {
     if (street){
@@ -48,12 +49,12 @@ const registerUser = async (req, res) => {
         }
       }
      
-
+if(pincode){
         if (!isValidPincode(pincode)) {
           return res
             .status(400)
             .send({ status: false, message: "Enter a valid pincode" });
-        }
+        }}
      
     }
 
@@ -100,15 +101,16 @@ const loginUser = async function (req, res) {
     const matchPassword = bcrypt.compare(password, getUser.password)
 
     if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" })
+
     let Payload = {
-      UserId: getUser._id.toString(),
+      userId: getUser._id.toString(),
       EmailID: getUser.email,
       Batch: "lithium",
       Group: "40",
-      Project: "project-booksManagementementGroup3",
+      Project: "project-booksManagementementGroup40",
     }
     
-   const  token = jwt.sign( Payload ,"key-title-secret" ,  {expiresIn: "15m"} )
+   const  token = jwt.sign( Payload ,"key-title-secret" ,  {expiresIn: "60m"} )
 
     return res.status(200).send({ status: true, message: "token is successfully generated",  token: token })
 
@@ -121,3 +123,5 @@ const loginUser = async function (req, res) {
 }
 
 module.exports = { registerUser , loginUser}
+
+//done
