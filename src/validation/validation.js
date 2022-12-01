@@ -6,8 +6,8 @@ if(date.test(value)) return true
 }
 
 const validTitle = function(value) {
-let title = /^(Mr|Mrs|Miss)$/
-if (title.test(value)) return true 
+let title = ["Mr","Mrs","Miss"]
+return title.includes(value)
 };
 
 const isValidStreet = function (body) {
@@ -16,7 +16,7 @@ return nameRegex.test(body);
 };
 
 const isValidPincode = function (Pincode) {
-const passRegex = /^[1-9][0-9]{5}$/
+const passRegex = /^[1-9][0-9]{0,5}$/
 return passRegex.test(Pincode)
 }
    

@@ -35,18 +35,14 @@ const books = new mongoose.Schema({
         default: 0
     },
     deletedAt: {
-        type: Date,
+        type: String,
         default: null
     },
     isDeleted: {
         type: Boolean,
         default: false
     },
-    releasedAt: {
-        type: Date,
-        formate: "YYYY-MM-DD",
-        require: true
-    }
+    releasedAt: ""
 }, { timestamps: true })
 
 module.exports = mongoose.model("book", books)

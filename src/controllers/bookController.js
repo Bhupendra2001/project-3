@@ -3,11 +3,14 @@ const userModels = require('../models/userModel')
 const bookModels = require('../models/bookModel')
 const reviewModels = require("../models/reviewModel")
 const { isvalidObjectid, validISBN, validName, validDate } = validation
+const moment = require("moment")
 
 const createBook = async (req, res) => {
     try {
 
+
         const data = req.body
+        const currentDate = moment().format("YYYY-MM-DD")
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Are ! All fields is mandatory" })
 
@@ -17,7 +20,7 @@ const createBook = async (req, res) => {
         if (!ISBN) return res.status(400).send({ status: false, msg: "Oooh... ISBN is mandatory" })
         if (!category) return res.status(400).send({ status: false, msg: "Oooh... category is mandatory" })
         if (!subcategory) return res.status(400).send({ status: false, msg: "Oooh... subcategory is mandatory" })
-        if (!releasedAt) return res.status(400).send({ status: false, msg: "Oooh... releasedAt is mandatory" })
+        //if (!releasedAt) return res.status(400).send({ status: false, msg: "Oooh... releasedAt is mandatory" })
 
 
         if (!validName(title)) return res.status(400).send({ status: false, msg: "Oooh... invalid title" })
@@ -32,6 +35,13 @@ const createBook = async (req, res) => {
 
         const userID = await userModels.findOne({ userId })
         if (!userID) return res.status(404).send({ status: false, msg: "Oooh... user is not present in data" })
+       
+            data["releasedAt"] = currentDate
+        
+
+        if(data["isDeleted"]){
+        data["deletedAt"] = currentDate
+    }
 
         const uniqeTitle = await bookModels.findOne({ title })
         if (uniqeTitle) return res.status(400).send({ status: false, msg: "Oooh... title should be unique" })
@@ -97,6 +107,7 @@ const getbook = async (req, res) => {
 const updateBooks = async function (req, res) {
     try {
         let data = req.body;
+        const currentDate = moment().format("YYYY-MM-DD")
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Areee... body should contain any title,excerpt,ISBN", });
 
         let bookId = req.params.bookId;
@@ -109,6 +120,10 @@ const updateBooks = async function (req, res) {
 
         if (data.releasedAt) {
             if (!validDate(data.releasedAt)) return res.status(400).send({ status: false, message: "Oooo... Date should be in (YYYY-MM-DD) format", });
+        }
+
+        if(data["isDeleted"]){
+            data["deletedAt"] = currentDate
         }
 
         let validBookId = await bookModels.findOne({ _id: bookId });

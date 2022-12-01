@@ -6,9 +6,9 @@ const Authentication = async (req, res, next) => {
     try {
         const hedear = req.headers["x-api-key"]
 
-        if (!hedear) return res.status(400).send({ status: false, msg: "Dost... header is not present" })
+        if (!hedear) return res.status(400).send({ status: false, msg: "token is not present" })
 
-        jwt.verify(hedear, "group40", function (err, token) {
+        jwt.verify(hedear, "key-title-secret", function (err, token) {
             if (err) {
                 return res.status(401).send({ status: false, msg: "Dost... Token is invalid Or Token has been Expired" })
             }

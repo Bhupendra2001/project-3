@@ -9,6 +9,8 @@ const { validTitle,validName,validMobile, validemail, validPassword,isValidStree
 const registerUser = async (req, res) => {
   try {
     const data = req.body
+    if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Are ! All fields is mandatory" })
+
     const { title, name, phone, email, password, address } = data
 
     if (address) { var { street, city, pincode } = address }
@@ -45,14 +47,14 @@ const registerUser = async (req, res) => {
             .send({ status: false, message: "Enter a valid city" });
         }
       }
-      if (pincode) {
+     
 
         if (!isValidPincode(pincode)) {
           return res
             .status(400)
             .send({ status: false, message: "Enter a valid pincode" });
         }
-      }
+     
     }
 
 
@@ -98,8 +100,15 @@ const loginUser = async function (req, res) {
     const matchPassword = bcrypt.compare(password, getUser.password)
 
     if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" })
-
-    let token = jwt.sign({ userId: getUser._id }, "group40", { expiresIn: "60m" })
+    let Payload = {
+      UserId: getUser._id.toString(),
+      EmailID: getUser.email,
+      Batch: "lithium",
+      Group: "40",
+      Project: "project-booksManagementementGroup3",
+    }
+    
+   const  token = jwt.sign( Payload ,"key-title-secret" ,  {expiresIn: "15m"} )
 
     return res.status(200).send({ status: true, message: "token is successfully generated",  token: token })
 

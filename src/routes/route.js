@@ -6,7 +6,7 @@ const review=require("../controllers/reviewController")
 const MW = require("../mid/auth")
 
 route.post("/register",  userController.registerUser )
-route.post("/logins",  userController.loginUser )
+route.post("/login",  userController.loginUser )
 
 route.post("/books",  MW.Authentication,  bookController.createBook )
 route.get("/books",   MW.Authentication,  bookController.getbooks )
