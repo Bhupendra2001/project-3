@@ -2,7 +2,7 @@ const mongoose=require("mongoose")
 
 const validDate = function (value) {
 let date=/^\d{4}-\d{2}-\d{2}$/
-if(date.test(value)) return true
+return date.test(value)
 }
 
 const validTitle = function(value) {
@@ -53,7 +53,9 @@ const validRating=function (value){
 let Rating = /^[1-5 ]{1,1}$/
 if (Rating.test(value)) return true
 }
-
-
+ const dad=(value)=>{
+    if(value.trim().length===0) return false
+    return true
+ }
 module.exports=
-{validRating,validTitle,validDate,validName,validMobile,validemail,validPassword,validISBN,isValidStreet,isValidPincode,isvalidObjectid}
+{dad,validRating,validTitle,validDate,validName,validMobile,validemail,validPassword,validISBN,isValidStreet,isValidPincode,isvalidObjectid}

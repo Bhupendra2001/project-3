@@ -35,7 +35,8 @@ const createReview = async function (req, res) {
             review: review
         }
 
-        const bookdata = await bookModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: 1 } })
+        const bookdata = await bookModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: 1 } }) 
+       if(bookdata.isDeleted)return res.status(400).send({status:false,msg:"book is already deleted"})
 
         let saveddata = await reviewModel.create(creatData)
 

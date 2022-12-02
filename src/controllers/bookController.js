@@ -2,7 +2,7 @@ const validation = require('../validation/validation')
 const userModels = require('../models/userModel')
 const bookModels = require('../models/bookModel')
 const reviewModels = require("../models/reviewModel")
-const { isvalidObjectid, validISBN, validName, validDate } = validation
+const { dad,isvalidObjectid, validISBN, validName, validDate } = validation
 const moment = require("moment")
 
 const createBook = async (req, res) => {
@@ -114,17 +114,19 @@ const updateBooks = async function (req, res) {
         if (data.ISBN) {
             if (!validISBN(data.ISBN)) { return res.status(400).send({ status: false, msg: "Oooo...  please provide a valid ISBN" }) }
         }
-//if give "" it takes
+
+        if(!dad(data.releasedAt)){return res.send({msg :"release date wrong"})}
+
         if (data.releasedAt) {
             if (!validDate(data.releasedAt)) return res.status(400).send({ status: false, message: "Oooo... Date should be in (YYYY-MM-DD) format", });
         }
+        
 
-         
         let validBookId = await bookModels.findOne({ _id: bookId });
 
 
         if (validBookId.title == data.title || validBookId.ISBN == data.ISBN || validBookId.excerpt == data.excerpt || validBookId.releasedAt == data.releasedAt)
-            return res.status(400).send({ status: false, msg: "Oooo... title or ISBN or releasedAt or excerpt are already present" })
+            return res.status(400).send({ status: false, msg: "Oooo... title or ISBN or releasedAt or excerpt are Already present" })
 
 
         let valid = await bookModels.findOne({ $or: [{ title: data.title }, { ISBN: data.ISBN }] })
