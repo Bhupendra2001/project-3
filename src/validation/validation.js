@@ -1,7 +1,7 @@
 const mongoose=require("mongoose")
 
 const validDate = function (value) {
-let date=/^\d{4}-\d{2}-\d{2}$/
+let date=/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/
 return date.test(value)
 }
 

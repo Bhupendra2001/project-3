@@ -20,7 +20,7 @@ route.put("/books/:bookId/review/:reviewId", review.updateReview )
 route.delete("/books/:bookId/review/:reviewId",review.deleteReview )
 
 route.all("/*",(req,res)=>{
-    return res.status(404).send({status:false,msg:"your end point is wrong"})
+    return res.status(400).send({status:false,msg:"your end point is wrong"})
 })
 
 module.exports = route

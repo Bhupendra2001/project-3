@@ -70,7 +70,7 @@ if(pincode){
 
   }
   catch (err) {
-    return res.status(500).send({ status: false, msg: err.message })
+    return res.status(500).send({ status: false, msg: err.message,message:"server error" })
   }
 }
 
@@ -118,7 +118,7 @@ const loginUser = async function (req, res) {
   } catch (error) {
     return res
       .status(500)
-      .send({ status: false, message: error.message })
+      .send({ status: false, message: error.message,msg:"server error" })
   }
 }
 

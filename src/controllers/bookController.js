@@ -3,13 +3,13 @@ const userModels = require('../models/userModel')
 const bookModels = require('../models/bookModel')
 const reviewModels = require("../models/reviewModel")
 const { dad,isvalidObjectid, validISBN, validName, validDate } = validation
-const moment = require("moment")
+// const moment = require("moment")
 
 const createBook = async (req, res) => {
     try {
 
         const data = req.body
-        const currentDate = moment().format("YYYY-MM-DD")
+        // const currentDate = moment().format("YYYY-MM-DD")
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Are ! All fields is mandatory" })
 
@@ -19,6 +19,7 @@ const createBook = async (req, res) => {
         if (!ISBN) return res.status(400).send({ status: false, msg: "Oooh... ISBN is mandatory" })
         if (!category) return res.status(400).send({ status: false, msg: "Oooh... category is mandatory" })
         if (!subcategory) return res.status(400).send({ status: false, msg: "Oooh... subcategory is mandatory" })
+        if (!releasedAt) return res.status(400).send({ status: false, msg: "Oooh... releasedAt is mandatory" })
 
 
         if (!validName(title)) return res.status(400).send({ status: false, msg: "Oooh... invalid title" })
@@ -32,6 +33,8 @@ const createBook = async (req, res) => {
         if (!validName(category)) return res.status(400).send({ status: false, msg: "Oooh... invalid category" })
 
         if (!validName(subcategory)) return res.status(400).send({ status: false, msg: "Oooh... invalid subcategory" })
+        
+        if (!validDate(releasedAt)) return res.status(400).send({ status: false, msg: "Oooh... invalid releasedAt" })
 
 
         const userID = await userModels.findOne({ _id: userId })
@@ -42,16 +45,16 @@ const createBook = async (req, res) => {
         const uniqeISBN = await bookModels.findOne({ ISBN })
         if (uniqeISBN) return res.status(400).send({ status: false, msg: "Oooh... ISBN should be unique" })
 
-        data["releasedAt"] = currentDate
+        // data["releasedAt"] = currentDate
 
-        if (data["isDeleted"]) {
-            data["deletedAt"] = currentDate
-        }
+        // if (data["isDeleted"]) {
+        //     data["deletedAt"] = currentDate
+        // }
 
         const savaData = await bookModels.create(data);
         return res.status(201).send({ status: true, msg: "successfully created ", savaData })
     } catch (err) {
-        return res.status(500).send({ status: false, msg: err.message })
+        return res.status(500).send({ status: false, msg: err.message ,message:"server error"})
     }
 }
 
@@ -62,18 +65,33 @@ const getbooks = async (req, res) => {
 
         let w = Object.keys(query)
 
+        if(Object.keys(query).length==0){
+
+            query.isDeleted = false
+
+            const data = await bookModels.find(query).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).sort({ title: 1 })
+    
+            if (data.length == 0) return res.status(404).send({ status: false, msg: "Oooh... data not found" })
+    
+            return res.status(200).send({ status: true, message: "Books list", data: data })
+
+        }
+
+        if(Object.keys(query).length>0){
+
         if (!["userId", "category", "subcategory"].includes(...w)) return res.status(400).send({ status: false, msg: "Oooh... query is wrong" })
 
          query.isDeleted = false
 
         const data = await bookModels.find(query).select({ title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1 }).sort({ title: 1 })
 
-        if (data.length == 0) return res.status(400).send({ status: false, msg: "Oooh... data not found" })
+        if (data.length == 0) return res.status(404).send({ status: false, msg: "Oooh... data not found" })
 
         return res.status(200).send({ status: true, message: "Books list", data: data })
     }
+}
     catch (err) {
-        return res.status(500).send({ status: false, msg: err.message })
+        return res.status(500).send({ status: false, msg: err.message ,message:"server error"})
     }
 
 }
@@ -85,7 +103,7 @@ const getbook = async (req, res) => {
         if (!isvalidObjectid(bookId)) return res.status(400).send({ status: false, msg: "Oooh... invalid bookId" })
 
         const Bookdata = await bookModels.findOne({ _id: bookId, isDeleted: false }).select({ ISBN: 0, __v: 0 })
-        if (!Bookdata) return res.status(400).send({ status: false, msg: "Oooh... books is not found" })
+        if (!Bookdata) return res.status(404).send({ status: false, msg: "Oooh... books is not found" })
 
         let review = await reviewModels.find({ bookId: bookId, isDeleted: false }).select({ isDeleted: 0 })
 
@@ -99,7 +117,7 @@ const getbook = async (req, res) => {
         return res.status(200).send({ ...data1 })
     }
     catch (err) {
-        return res.send(500).send({ status: false, msg: err.message })
+        return res.send(500).send({ status: false, msg: err.message,message:"server error" })
     }
 }
 
@@ -148,7 +166,7 @@ const updateBooks = async function (req, res) {
 
         return res.status(200).send({ status: true, message: 'Success', data: UpdateABook });
     } catch (error) {
-        return res.status(500).send({ status: false, error: error.message });
+        return res.status(500).send({ status: false, msg: error.message ,message:"server error"});
     }
 };
 
@@ -168,7 +186,7 @@ const bookDelete = async (req, res) => {
 
 
     } catch (error) {
-        return res.status(500).send({ status: false, message: error.message });
+        return res.status(500).send({ status: false, message: error.message,msg:"server error" });
     }
 };
 
