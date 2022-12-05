@@ -78,8 +78,10 @@ if(pincode){
 
 const loginUser = async function (req, res) {
   try {
+
     email = req.body.email
     password = req.body.password
+
     //===============================================user email  id is requires===================================================//      
     if (!email) return res
       .status(400)
@@ -89,21 +91,22 @@ const loginUser = async function (req, res) {
     if (!password) return res
       .status(400)
       .send({ status: false, msg: "Password is required" })
-    //==============================================checking the email id or password is exist or not ===========================//     
+    //==============================================checking the email id or password is exist or not ===========================// 
+   
     let getUser = await userModel
-      .findOne({ email: email })
-      .select({ password: 1 })
+      .findOne({ email: email }).select({password : 1})
+      
 
     //================================================User not found==============================================================//    
     if (!getUser) return res.status(404).send({ status: false, msg: "User not found" })
 
     //========================================password matching by bcrypt.compare method password comeparing ==================================//      
-    const matchPassword =await bcrypt.compare(password, getUser.password)
+    const matchPassword = bcrypt.compare(password, getUser.password)
 
     if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" })
 
     let Payload = {
-      userId: getUser._id.toString(),
+      userId: getUser._id,
       EmailID: getUser.email,
       Batch: "lithium",
       Group: "40",
@@ -115,7 +118,7 @@ const loginUser = async function (req, res) {
     return res.status(200).send({ status: true, message: "token is successfully generated",  token: token })
 
 
-  } catch (error) {
+  } catch (error){
     return res
       .status(500)
       .send({ status: false, message: error.message,msg:"server error" })
