@@ -3,13 +3,13 @@ const userModels = require('../models/userModel')
 const bookModels = require('../models/bookModel')
 const reviewModels = require("../models/reviewModel")
 const { dad,isvalidObjectid, validISBN, validName, validDate } = validation
-// const moment = require("moment")
+
 
 const createBook = async (req, res) => {
     try {
 
         const data = req.body
-        // const currentDate = moment().format("YYYY-MM-DD")
+       
         const { title, excerpt, userId, ISBN, category, subcategory, releasedAt } = data
         if (Object.keys(data).length == 0) return res.status(400).send({ status: false, msg: "Are ! All fields is mandatory" })
 
@@ -44,12 +44,6 @@ const createBook = async (req, res) => {
         if (uniqeTitle) return res.status(400).send({ status: false, msg: "Oooh... title should be unique" })
         const uniqeISBN = await bookModels.findOne({ ISBN })
         if (uniqeISBN) return res.status(400).send({ status: false, msg: "Oooh... ISBN should be unique" })
-
-        // data["releasedAt"] = currentDate
-
-        // if (data["isDeleted"]) {
-        //     data["deletedAt"] = currentDate
-        // }
 
         const savaData = await bookModels.create(data);
         return res.status(201).send({ status: true, msg: "successfully created ", savaData })
@@ -109,7 +103,7 @@ const getbook = async (req, res) => {
 
         let data1 = {
             status: true,
-            msg: "Book List",
+            message : "Book List",
             data: Bookdata,
             reviewData: review
         }
