@@ -63,6 +63,8 @@ if(pincode){
     const HassPassword = await bcrypt.hash(password, salt)
     req.body["password"] = HassPassword
 
+const salt1=await bcrypt.genSalt(saltRounts)
+
 
     const dataStore = await userModel.create(data)
     return res.status(201).send({ status: true, msg: "userCreate successfully", dataStore })
@@ -101,10 +103,10 @@ const loginUser = async function (req, res) {
     if (!getUser) return res.status(404).send({ status: false, msg: "User not found" })
 
     //========================================password matching by bcrypt.compare method password comeparing ==================================//      
-    const matchPassword = bcrypt.compare(password, getUser.password)
+    const matchPassword =await bcrypt.compare(password, getUser.password)
 
     if (!matchPassword) return res.status(401).send({ status: false, msg: "Password is incorrect" })
-
+ 
     let Payload = {
       userId: getUser._id,
       EmailID: getUser.email,

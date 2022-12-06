@@ -3,6 +3,7 @@ const route = express.Router()
 const userController = require('../controllers/userController')
 const bookController = require("../controllers/bookController")
 const review=require("../controllers/reviewController")
+const aws=require("../controllers/aws")
 const {Authentication,Authrization}=require("../mid/auth")
 
 route.post("/register",  userController.registerUser )
@@ -18,6 +19,11 @@ route.delete("/books/:bookId",Authentication, Authrization,  bookController.book
 route.post("/books/:bookId/review",   review.createReview )
 route.put("/books/:bookId/review/:reviewId", review.updateReview )
 route.delete("/books/:bookId/review/:reviewId",review.deleteReview )
+
+route.post("/write-file-aws",aws.bookCover)
+
+
+
 
 route.all("/*",(req,res)=>{
     return res.status(400).send({status:false,msg:"your end point is wrong"})
